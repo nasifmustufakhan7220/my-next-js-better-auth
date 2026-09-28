@@ -2,14 +2,14 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
-const mongoURL = process.env.BETTER_AUTH_URL;
+const mongoURL = process.env.BETTER_AUTH_DB_URL;
 
 if(!mongoURL){
   throw new Error("BETTER_AUTH_URL is not defined");
 }
 
 const client = new MongoClient(mongoURL);
-const db = client.db();
+const db = client.db("user");
 
 export const auth = betterAuth({
   emailAndPassword: {
