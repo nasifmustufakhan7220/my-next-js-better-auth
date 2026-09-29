@@ -1,31 +1,42 @@
-"use client"
+"use client";
 import { signIn } from "@/lib/auth-client";
-import {Check} from "@gravity-ui/icons";
-import {Button, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
+import { Check } from "@gravity-ui/icons";
+import { Eye, EyeSlash } from "@gravity-ui/icons";
+import { InputGroup } from "@heroui/react";
+import {
+  Button,
+  Description,
+  FieldError,
+  Form,
+  Input,
+  Label,
+  TextField,
+} from "@heroui/react";
+import { useState } from "react";
 
 const SingInPage = () => {
-    const onSubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
+  const [isVisible, setIsVisible] = useState(false);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
 
-        const data = Object.fromEntries(formData.entries()) as Record<string, string>
+    const data = Object.fromEntries(formData.entries()) as Record<
+      string,
+      string
+    >;
 
-        const {data: resData, error} = await signIn.email({
-            email: data.email,
-            password: data.password,
-            callbackURL: '/'
-        });
+    const { data: resData, error } = await signIn.email({
+      email: data.email,
+      password: data.password,
+      callbackURL: "/",
+    });
 
-        console.log(resData, error);
-    }
+    console.log(resData, error);
+  };
   return (
     <div>
-      <h2>Please sign in</h2>
-      <Form
-        className="flex w-96 flex-col gap-4"
-        render={(props) => <form {...props} data-custom="foo" />}
-        onSubmit={onSubmit}
-      >
+      <h2>Please Sign in</h2>
+      <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
         <TextField
           isRequired
           name="email"
@@ -42,10 +53,8 @@ const SingInPage = () => {
           <FieldError />
         </TextField>
         <TextField
-          isRequired
-          minLength={8}
+          className="w-full max-w-70"
           name="password"
-          type="password"
           validate={(value) => {
             if (value.length < 8) {
               return "Password must be at least 8 characters";
@@ -60,12 +69,34 @@ const SingInPage = () => {
           }}
         >
           <Label>Password</Label>
-          <Input placeholder="Enter your password" />
+
+          <InputGroup>
+            <InputGroup.Input
+              className="w-full max-w-70"
+              type={isVisible ? "text" : "password"}
+            />
+            <InputGroup.Suffix className="pe-0">
+              <Button
+                isIconOnly
+                aria-label={isVisible ? "Hide password" : "Show password"}
+                size="sm"
+                variant="ghost"
+                onPress={() => setIsVisible(!isVisible)}
+              >
+                {isVisible ? (
+                  <Eye className="size-4" />
+                ) : (
+                  <EyeSlash className="size-4" />
+                )}
+              </Button>
+            </InputGroup.Suffix>
+          </InputGroup>
           <Description>
             Must be at least 8 characters with 1 uppercase and 1 number
           </Description>
           <FieldError />
         </TextField>
+
         <div className="flex gap-2">
           <Button type="submit">
             <Check />
