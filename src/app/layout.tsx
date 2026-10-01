@@ -1,4 +1,5 @@
 import { setServers } from "node:dns/promises";
+import { Toast } from '@heroui/react';
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 import type { Metadata } from "next";
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+         <Toast.Provider />
         <Navbar/>
         {children}
         </body>

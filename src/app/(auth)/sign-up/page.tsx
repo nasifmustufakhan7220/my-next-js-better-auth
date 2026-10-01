@@ -1,6 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
@@ -13,7 +12,6 @@ import {
 } from "@heroui/react";
 
 const SignUpPage = () => {
-    const router = useRouter()
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,12 +28,39 @@ const SignUpPage = () => {
       callbackURL: "/sign-in",
     });
 
-    if(!error){
-        router.push('/sign-in')
-    }
+    console.log(resData, error);
+  };
+
+
+  const handelGoggleSignIn = async()=>{
+    const resData = await signIn.social({
+      provider: "google",
+    });
 
     console.log(resData);
-  };
+  }
+
+  const handelDiscordSignIn = async()=>{
+    const resData = await signIn.social({
+      provider: "discord",
+    });
+
+    console.log(resData);
+  }
+
+  const handelFacebookSignIn = async()=>{
+    const resData = await signIn.social({
+      provider: 'facebook',
+    });
+    console.log(resData);
+  }
+
+  const handelGitHubSignIn = async()=>{
+    const resData = await signIn.social({
+      provider: "github",
+    });
+    console.log(resData);
+  }
   return (
     <div>
       <h2>Please Sign up</h2>
@@ -103,8 +128,19 @@ const SignUpPage = () => {
           <Button type="reset" variant="secondary">
             Reset
           </Button>
+
+          {/* OR */}
+
         </div>
       </Form>
+          <div className="flex items-center gap-2">
+            <p>OR</p>
+            <Button type="button" onClick={handelGoggleSignIn}>Sing in with Google</Button>  
+            <Button type="button" onClick={handelDiscordSignIn}>Sing in with Discord</Button> 
+            <Button type="button" onClick={handelFacebookSignIn}>Sing in with Facebook</Button> 
+            <Button type="button" onClick={handelGitHubSignIn}>Sing in with GitHub</Button> 
+            
+          </div>
     </div>
   );
 };

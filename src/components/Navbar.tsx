@@ -1,9 +1,12 @@
 "use client"
 import { signOut, useSession } from "@/lib/auth-client";
-import { Link, Button, Spinner} from "@heroui/react";
+import { Button, Spinner} from "@heroui/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 const Navbar = () => {
+    const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {data:session, isPending} = useSession();
 
@@ -13,19 +16,24 @@ const Navbar = () => {
         <span className="text-xs text-muted">Loading....</span>
       </div>
     }
+    console.log("navbar session", session);
 
     const links = <>
         <li>
-            <Link href="#">Features</Link>
+            <Link href="/features" className={`${pathname === '/features' && "text-accent"} font-medium `}>Features</Link>
         </li>
         <li>
-            <Link href="#" className="font-medium text-accent" aria-current="page">
+            <Link href="/dashboard" className={`${pathname === '/dashboard' && "text-accent"} font-medium `} aria-current="page">
                 Dashboard
             </Link>
         </li>
         <li>
-            <Link href="#">Pricing</Link>
+            <Link href="/pricing" className={`${pathname === '/pricing' && "text-accent"} font-medium `}>Pricing</Link>
         </li>
+        
+        {session?.user && <li>
+            <Link href="/profile" className={`${pathname === '/profile' && "text-accent"} font-medium `}>Profile</Link>
+        </li>}
     </>
 
 
